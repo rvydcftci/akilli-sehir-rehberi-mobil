@@ -1,16 +1,26 @@
-# akilli_sehir_rehberi_mobil
+# 🏙️ Akıllı Şehir Rehberi Mobil Uygulaması
 
-A new Flutter project.
+Bu proje, şehirdeki mekanları listeleyen, haritada gösteren, konuma göre öneriler sunan ve kullanıcı yorumlarıyla zenginleştirilen bir **akıllı şehir rehberi mobil uygulamasıdır**.
 
-## Getting Started
+## ✨ Özellikler
 
-This project is a starting point for a Flutter application.
+- 🔐 Firebase Authentication ile kullanıcı kayıt ve giriş
+- 🗺️ Google Maps ile mekanların haritada gösterimi (ileride eklenecek)
+- 📍 Konum tabanlı mekan önerileri (ileride eklenecek)
+- 🌟 Mekanlara yorum ve puan verme
+- 💬 Yapay Zekâ öneri asistanı (OpenAI API)
+- 🔔 Bildirim sistemi (FCM)
 
-A few resources to get you started if this is your first Flutter project:
+## 🚀 Teknolojiler
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+- Flutter (mobil geliştirme)
+- Firebase (Authentication, Firestore, Messaging)
+- Google Maps API
+- OpenAI API
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Kurulum
+
+1. Flutter SDK kurulu olmalı
+2. Projeyi klonla:
+   ```bash
+   git clone https://github.com/rydciftci/akilli-sehir-rehberi-mobil.git
