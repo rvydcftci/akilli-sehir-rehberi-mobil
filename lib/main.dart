@@ -1,8 +1,7 @@
-import 'package:akilli_sehir_rehberi_mobil/pages/splash_screen.dart';
+import 'package:akilli_sehir_rehberi_mobil/pages/mekan_listesi_sayfasi.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart'; // bu satırı ekle
-import 'pages/login_page.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,7 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Akıllı Rehber',
-      home: SplashScreen(), // 🔁 Giriş yerine splash gösteriyoruz
+      home: MekanListesiSayfasi(), // Splash yerine mekan listesi ekranı
     );
   }
 }
