@@ -1,7 +1,7 @@
 import 'package:akilli_sehir_rehberi_mobil/pages/register_page.dart';
+import 'package:akilli_sehir_rehberi_mobil/pages/home_screen.dart'; // BURASI DÜZELTİLDİ
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'home_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -25,7 +25,8 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => const HomePage()),
+        MaterialPageRoute(
+            builder: (context) => const HomeScreen()), // BURASI DÜZELTİLDİ
       );
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Bir hata oluştu';
