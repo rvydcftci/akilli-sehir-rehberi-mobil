@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'mekan_detay_sayfasi.dart'; // Detay sayfası import edildi
 
 class MekanListesiSayfasi extends StatelessWidget {
   const MekanListesiSayfasi({super.key});
@@ -8,18 +9,20 @@ class MekanListesiSayfasi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Siyah arka plan
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
         title: Text(
-          "🌃 Mekanlar",
+          "🌆 Mekanlar",
           style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontSize: 24,
+            color: Colors.black,
+            fontSize: 22,
             fontWeight: FontWeight.bold,
           ),
         ),
+        backgroundColor: Colors.white,
+        elevation: 1,
         centerTitle: true,
-        backgroundColor: Colors.black,
+        iconTheme: const IconThemeData(color: Colors.black),
       ),
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance.collection('mekanlar').snapshots(),
@@ -28,7 +31,7 @@ class MekanListesiSayfasi extends StatelessWidget {
             return Center(
               child: Text(
                 "Bir hata oluştu.",
-                style: GoogleFonts.poppins(color: Colors.white),
+                style: GoogleFonts.poppins(color: Colors.black54),
               ),
             );
           }
@@ -43,101 +46,99 @@ class MekanListesiSayfasi extends StatelessWidget {
             return Center(
               child: Text(
                 "Henüz mekan eklenmemiş.",
-                style: GoogleFonts.poppins(color: Colors.white70),
+                style: GoogleFonts.poppins(color: Colors.black45),
               ),
             );
           }
 
           return GridView.builder(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(12),
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // iki sütunlu grid
-              childAspectRatio: 0.75,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
+              crossAxisCount: 2,
+              childAspectRatio: 0.85,
+              crossAxisSpacing: 12,
+              mainAxisSpacing: 12,
             ),
             itemCount: mekanlar.length,
             itemBuilder: (context, index) {
-              var mekan = mekanlar[index];
-              var mekanData = mekan.data() as Map<String, dynamic>;
+              final mekan = mekanlar[index];
+              final data = mekan.data() as Map<String, dynamic>;
 
-              return Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey[900],
-                  borderRadius: BorderRadius.circular(15),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      blurRadius: 6,
-                      offset: const Offset(0, 4),
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          MekanDetaySayfasi(mekanVerisi: data),
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    ClipRRect(
-                      borderRadius:
-                          const BorderRadius.vertical(top: Radius.circular(15)),
-                      child: mekanData.containsKey('gorselUrl') &&
-                              mekanData['gorselUrl'] != null
-                          ? Image.network(
-                              mekanData['gorselUrl'],
-                              height: 100,
-                              fit: BoxFit.cover,
-                            )
-                          : Container(
-                              height: 100,
-                              color: Colors.grey,
-                              child: const Icon(Icons.image,
-                                  color: Colors.white54, size: 50),
-                            ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            mekanData['ad'] ?? 'Adsız Mekan',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                              fontSize: 16,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            mekanData['aciklama'] ?? 'Açıklama yok',
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: GoogleFonts.poppins(
-                              fontSize: 13,
-                              color: Colors.white70,
-                            ),
-                          ),
-                          const SizedBox(height: 6),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              const Icon(Icons.star,
-                                  size: 16, color: Colors.amber),
-                              const SizedBox(width: 3),
-                              Text(
-                                "${mekanData['puan'] ?? 0}",
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 13,
-                                ),
+                  );
+                },
+                child: Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 4,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ClipRRect(
+                        borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(16)),
+                        child: data.containsKey('gorselUrl') &&
+                                data['gorselUrl'] != null
+                            ? Image.network(
+                                data['gorselUrl'],
+                                height: 80,
+                                fit: BoxFit.cover,
+                              )
+                            : Container(
+                                height: 120,
+                                color: Colors.grey[300],
+                                child: const Icon(Icons.image_not_supported,
+                                    size: 48),
                               ),
-                            ],
-                          ),
-                        ],
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              data['ad'] ?? 'Mekan Adı',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.poppins(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              data['aciklama'] ?? 'Açıklama bulunamadı',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.quicksand(
+                                  fontSize: 13, color: Colors.black54),
+                            ),
+                            const SizedBox(height: 6),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                const Icon(Icons.star,
+                                    color: Colors.amber, size: 18),
+                                const SizedBox(width: 4),
+                                Text(
+                                  "${data['puan'] ?? 0}",
+                                  style: GoogleFonts.poppins(fontSize: 13),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },
