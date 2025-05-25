@@ -1,7 +1,9 @@
 import 'package:akilli_sehir_rehberi_mobil/pages/register_page.dart';
-import 'package:akilli_sehir_rehberi_mobil/pages/home_screen.dart'; // BURASI DÜZELTİLDİ
+import 'package:akilli_sehir_rehberi_mobil/pages/home_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   bool _obscure = true;
 
-  void loginUser() async {
+  Future<void> loginUser() async {
     try {
       await _auth.signInWithEmailAndPassword(
         email: emailController.text.trim(),
@@ -25,8 +27,7 @@ class _LoginPageState extends State<LoginPage> {
 
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) => const HomeScreen()), // BURASI DÜZELTİLDİ
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
       );
     } on FirebaseAuthException catch (e) {
       String errorMessage = 'Bir hata oluştu';
@@ -39,6 +40,55 @@ class _LoginPageState extends State<LoginPage> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(errorMessage),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+    }
+  }
+
+  Future<void> loginWithGoogle() async {
+    try {
+      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
+
+      if (googleUser == null) return; // Kullanıcı iptal etti
+
+      final GoogleSignInAuthentication googleAuth =
+          await googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        accessToken: googleAuth.accessToken,
+        idToken: googleAuth.idToken,
+      );
+
+      UserCredential userCredential =
+          await _auth.signInWithCredential(credential);
+
+      final user = userCredential.user;
+
+      // Eğer kullanıcı Firestore'da kayıtlı değilse, yeni belge oluştur
+      if (user != null) {
+        final userDoc =
+            FirebaseFirestore.instance.collection('users').doc(user.email);
+        final snapshot = await userDoc.get();
+
+        if (!snapshot.exists) {
+          await userDoc.set({
+            'name': user.displayName ?? 'Google Kullanıcısı',
+            'email': user.email,
+            'avatar': 'avatar1.png', // varsayılan avatar
+          });
+        }
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const HomeScreen()),
+        );
+      }
+    } catch (e) {
+      print("Google ile giriş hatası: $e");
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Google ile giriş başarısız oldu."),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -120,7 +170,26 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 20),
+              // 🔹 Google ile Giriş Butonu
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: loginWithGoogle,
+                  icon: Image.asset('assets/images/google.png', height: 24),
+                  label: const Text("Google ile Giriş Yap"),
+                  style: OutlinedButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    side: const BorderSide(color: Colors.grey),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    foregroundColor: Colors.black87,
+                    backgroundColor: Colors.white,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
               TextButton(
                 onPressed: () {
                   Navigator.pushReplacement(

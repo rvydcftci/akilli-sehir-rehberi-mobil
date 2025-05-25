@@ -1,29 +1,29 @@
 {
-  "project_info": {
-    "project_number": "100839965102",
-    "project_id": "akilli-sehir-rehberi-mobil",
-    "storage_bucket": "akilli-sehir-rehberi-mobil.firebasestorage.app"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:100839965102:android:6bdb6b16c84ee1e355483f",
-        "android_client_info": {
-          "package_name": "com.ruveyda.akilli_sehir_rehberi_mobil"
-        }
-      },
-      "oauth_client": [],
-      "api_key": [
+    "project_info": {
+        "project_number": "100839965102",
+        "project_id": "akilli-sehir-rehberi-mobil",
+        "storage_bucket": "akilli-sehir-rehberi-mobil.firebasestorage.app"
+    },
+    "client": [
         {
-          "current_key": "AIzaSyCUm5p_EiQBymgsEAfjQFKlgJEu3KZVkXs"
+            "client_info": {
+                "mobilesdk_app_id": "1:100839965102:android:6bdb6b16c84ee1e355483f",
+                "android_client_info": {
+                    "package_name": "com.ruveyda.akilli_sehir_rehberi_mobil"
+                }
+            },
+            "oauth_client": [],
+            "api_key": [
+                {
+                    "current_key": "AIzaSyCUm5p_EiQBymgsEAfjQFKlgJEu3KZVkXs"
+                }
+            ],
+            "services": {
+                "appinvite_service": {
+                    "other_platform_oauth_client": []
+                }
+            }
         }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": []
-        }
-      }
-    }
-  ],
-  "configuration_version": "1"
+    ],
+    "configuration_version": "1"
 }

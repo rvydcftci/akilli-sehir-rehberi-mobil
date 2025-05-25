@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart'; // EKLENDİ
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'login_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -11,27 +11,33 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _nameController =
-      TextEditingController(); // EKLENDİ
+  final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _obscure = true;
 
+  String _selectedAvatar = 'avatar1.png'; // Varsayılan avatar
+  final List<String> _avatarList = [
+    'avatar1.jpeg',
+    'avatar2.jpeg',
+    'avatar3.jpeg',
+    'avatar4.jpeg',
+  ];
+
   Future<void> _register() async {
     try {
-      // Firebase Authentication ile kullanıcı oluştur
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: _emailController.text.trim(),
         password: _passwordController.text.trim(),
       );
 
-      // Firestore'a kullanıcı bilgilerini kaydet
       await FirebaseFirestore.instance
           .collection('users')
           .doc(_emailController.text.trim())
           .set({
         'name': _nameController.text.trim(),
         'email': _emailController.text.trim(),
+        'avatar': _selectedAvatar,
       });
 
       ScaffoldMessenger.of(context).showSnackBar(
@@ -65,8 +71,8 @@ class _RegisterPageState extends State<RegisterPage> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset('assets/images/logo.png', height: 120),
-              const SizedBox(height: 30),
+              Image.asset('assets/images/logo.png', height: 100),
+              const SizedBox(height: 20),
               const Text(
                 "KAYIT OL",
                 style: TextStyle(
@@ -77,37 +83,21 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 30),
 
-              // 🔹 Ad Soyad alanı
+              // Ad Soyad
               TextField(
                 controller: _nameController,
-                decoration: InputDecoration(
-                  labelText: 'Ad Soyad',
-                  prefixIcon: const Icon(Icons.person),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+                decoration: _inputDecoration("Ad Soyad", Icons.person),
               ),
               const SizedBox(height: 20),
 
-              // 🔹 E-posta alanı
+              // E-posta
               TextField(
                 controller: _emailController,
-                decoration: InputDecoration(
-                  labelText: 'E-posta',
-                  prefixIcon: const Icon(Icons.email_outlined),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
+                decoration: _inputDecoration("E-posta", Icons.email_outlined),
               ),
               const SizedBox(height: 20),
 
-              // 🔹 Şifre alanı
+              // Şifre
               TextField(
                 controller: _passwordController,
                 obscureText: _obscure,
@@ -131,9 +121,51 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                 ),
               ),
+              const SizedBox(height: 25),
+
+              // Avatar başlığı
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Avatar Seç:",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // Avatar seçimi
+              Wrap(
+                spacing: 12,
+                children: _avatarList.map((avatar) {
+                  return GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _selectedAvatar = avatar;
+                      });
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(4),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: _selectedAvatar == avatar
+                              ? const Color(0xFF1E88E5)
+                              : Colors.transparent,
+                          width: 2,
+                        ),
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage('assets/avatars/$avatar'),
+                        radius: 30,
+                        backgroundColor: Colors.grey[200],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
               const SizedBox(height: 30),
 
-              // 🔹 Kayıt Butonu
+              // Kayıt butonu
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
@@ -153,7 +185,7 @@ class _RegisterPageState extends State<RegisterPage> {
               ),
               const SizedBox(height: 15),
 
-              // 🔹 Giriş sayfasına yönlendirme
+              // Giriş yönlendirme
               TextButton(
                 onPressed: () {
                   Navigator.pushReplacement(
@@ -166,6 +198,19 @@ class _RegisterPageState extends State<RegisterPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  // Ortak input görünümü
+  InputDecoration _inputDecoration(String label, IconData icon) {
+    return InputDecoration(
+      labelText: label,
+      prefixIcon: Icon(icon),
+      filled: true,
+      fillColor: Colors.white,
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(12),
       ),
     );
   }

@@ -1,28 +1,46 @@
 name: akilli_sehir_rehberi_mobil
-description: "A new Flutter project."
+description: Akıllı Şehir Rehberi mobil uygulaması
 
 publish_to: 'none'
+
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.4 <4.0.0'
+  sdk: '>=3.1.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.6
+
+  firebase_core: ^2.25.4
+  firebase_auth: ^4.17.6
+  cloud_firestore: ^4.15.7
   google_fonts: ^6.1.0
-  firebase_core: ^3.12.1
-  firebase_auth: ^5.5.1
-  cloud_firestore: ^5.6.5
-  firebase_messaging: ^15.2.4
+  google_sign_in: ^6.1.5
+  font_awesome_flutter: ^10.7.0 # sürüm fark edebilir
+  flutter_rating_bar: ^4.0.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
-  google_fonts: ^6.2.1
+
 flutter:
   uses-material-design: true
+
   assets:
     - assets/images/logo.png
+    - assets/avatars/avatar1.jpeg
+    - assets/avatars/avatar2.jpeg
+    - assets/avatars/avatar3.jpeg
+    - assets/avatars/avatar4.jpeg
+    - assets/images/google.png
+    - assets/images/giris.png
+    - assets/restoran.jpeg
+    - assets/ulu.jpeg
+    - assets/kale.jpeg
+    - assets/kafe.jpeg
+
+  fonts:
+    - family: Rowdies
+      fonts:
+        - asset: assets/fonts/Rowdies-Bold.ttf
